@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>MINT户籍网</title>
+<style>
+body {
+    margin: 0;
+    font-family: monospace;
+    background: black;
+    color: #00ffcc;
+    overflow: hidden;
+}
+
+/* 黑客风动态背景 */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.container {
+    text-align: center;
+    margin-top: 50px;
+}
+
+button {
+    display: block;
+    margin: 10px auto;
+    padding: 12px 20px;
+    background: rgba(0,0,0,0.7);
+    border: 1px solid #00ffcc;
+    color: #00ffcc;
+    cursor: pointer;
+    width: 260px;
+}
+
+button:hover {
+    background: #00ffcc;
+    color: black;
+}
+
+#status {
+    margin-top: 20px;
+    color: #ff4444;
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+    <h2>MINT户籍网（TG：@ZHUOLIE520）</h2>
+
+    <div id="buttons"></div>
+
+    <div id="status"></div>
+</div>
+
+<audio id="successSound">
+    <source src="https://www.soundjay.com/buttons/sounds/button-3.mp3">
+</audio>
+
+<script>
+// 按钮列表（安全改版）
+const names = [
+    "微信打号", "QQ打号", "公安网户籍", "全国人肉（风险高）", "手机号返地区",
+    "照妖镜", "大头照", "快手无违规打号", "抖音无违规打号", "祝各位大手子天天开心"
+];
+
+let unlocked = false;
+
+const container = document.getElementById("buttons");
+
+names.forEach(name => {
+    const btn = document.createElement("button");
+    btn.innerText = name;
+
+    btn.onclick = () => {
+        if (!unlocked) {
+            let key = prompt("请输入卡密:");
+            if (key === "159357") {
+                unlocked = true;
+                document.getElementById("status").innerText = "✔ 欢迎进入系统";
+                document.getElementById("successSound").play();
+            } else {
+                alert("卡密错误");
+            }
+        } else {
+            document.getElementById("status").innerText = "⚠ 系统维护中，暂不可用";
+        }
+    };
+
+    container.appendChild(btn);
+});
+
+/* Matrix 背景 */
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+let letters = "01";
+letters = letters.split("");
+
+let fontSize = 14;
+let columns = canvas.width / fontSize;
+
+let drops = [];
+for (let x = 0; x < columns; x++) drops[x] = 1;
+
+function draw() {
+    ctx.fillStyle = "rgba(0,0,0,0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#0f0";
+    ctx.font = fontSize + "px monospace";
+
+    for (let i = 0; i < drops.length; i++) {
+        let text = letters[Math.floor(Math.random()*letters.length)];
+        ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+
+        if (drops[i]*fontSize > canvas.height && Math.random() > 0.975)
+            drops[i] = 0;
+
+        drops[i]++;
+    }
+}
+
+setInterval(draw, 33);
+</script>
+
+</body>
+</html>
